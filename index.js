@@ -27,7 +27,7 @@ bot.on("message", async (ctx) => {
   // Добавляем айдишники пользователей для рассылки
   if (text === "/startlection") {
     await axios
-      .get("http://95.163.234.208:7000/api/list/getlist")
+      .get("http://95.163.234.208:9000/api/list/getlist")
       .then(async (res) => {
         let inlineKeyboard = [];
         res.data.map((data) => {
@@ -57,13 +57,13 @@ bot.on("message", async (ctx) => {
 
   if (text === "/quit") {
     await axios
-      .get("http://95.163.234.208:7000/api/list/getlist")
+      .get("http://95.163.234.208:9000/api/list/getlist")
       .then((res) => {
         bot.telegram.sendMessage(chatId, "Вы покинули службу");
         res.data.forEach((data) => {
           if (data.usersId) {
             axios.patch(
-              `http://95.163.234.208:7000/api/list/updatelistusers/${data._id}`,
+              `http://95.163.234.208:9000/api/list/updatelistusers/${data._id}`,
               {
                 usersId: data.usersId.filter((name) => name !== chatId),
                 id: data._id,
@@ -78,7 +78,7 @@ bot.on("message", async (ctx) => {
 bot.on("poll_answer", async (ctx) => {
   let array = [];
   axios
-    .get("http://95.163.234.208:7000/api/lection/getmaterials")
+    .get("http://95.163.234.208:9000/api/lection/getmaterials")
     .then((res) => {
       {
         res.data.forEach((task) => {
@@ -87,7 +87,7 @@ bot.on("poll_answer", async (ctx) => {
             if (task.optionsReply.length !== 0) {
               task.optionsReply.push(ctx.pollAnswer.option_ids[0]);
               axios.patch(
-                "http://95.163.234.208:7000/api/lection/updatematerial",
+                "http://95.163.234.208:9000/api/lection/updatematerial",
                 {
                   ...task,
                   optionsReply: task.optionsReply,
@@ -95,7 +95,7 @@ bot.on("poll_answer", async (ctx) => {
               );
             } else {
               axios.patch(
-                "http://95.163.234.208:7000/api/lection/updatematerial",
+                "http://95.163.234.208:9000/api/lection/updatematerial",
                 {
                   ...task,
                   optionsReply: [ctx.pollAnswer.option_ids[0]],
@@ -145,7 +145,7 @@ bot.on("callback_query", async (ctx) => {
   }
   if (data.length > 6) {
     await axios
-      .get(`http://95.163.234.208:7000/api/list/getlist/${data}`)
+      .get(`http://95.163.234.208:9000/api/list/getlist/${data}`)
       .then(async (res) => {
         if (res.data.usersId.indexOf(chatId) === -1) {
           usersId.push(chatId);
@@ -156,7 +156,7 @@ bot.on("callback_query", async (ctx) => {
           await res.data.usersId.push(chatId);
           uniqueIds.add(usersId);
           await axios.patch(
-            `http://95.163.234.208:7000/api/list/updatelistusers/${data}`,
+            `http://95.163.234.208:9000/api/list/updatelistusers/${data}`,
             {
               usersId: res.data.usersId,
               id: data,
