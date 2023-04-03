@@ -13,19 +13,32 @@ bot.on("message", async (ctx) => {
   if (text === "/start") {
     bot.telegram.sendMessage(
       chatId,
-      "Добро пожаловать. Выберите раздел 'Инструкция по использованию бота' в меню, чтобы узнать подробности."
+      "Добро пожаловать. Выберите раздел 'Инструкция по использованию бота' в меню, чтобы узнать подробности.",
+      {
+        reply_markup: {
+          keyboard: [
+            [
+              { text: "Богослужения" },
+              { text: "Молитвы" },
+              { text: "Информация" },
+            ],
+          ],
+          resize_keyboard: true,
+          one_time_keyboard: true,
+        },
+      }
     );
   }
 
-  if (text === "/faq") {
+  if (text === "Информация") {
     bot.telegram.sendMessage(chatId, {
-      text: "*Инструкция к боту*.\n\nНажмите на кнопку *К службе* в левом нижнем меню, либо введите команду `/startlection`, чтобы выбрать службу\n\nДля выхода со службы используйте команду `/quit`, либо нажмите на кнопку *Покинуть службу* для того чтобы материалы со службы не приходили.",
+      text: "Axiolist - это чат-бот, предназначенный для текстового и визуального сопровождения богослужений и содержащий текстовый и аудио-молитвослов. Проект подготовлен для того, чтобы участие в церковных таинствах для православных прихожан было более удобным и осознанным",
       parse_mode: "Markdown",
     });
   }
 
   // Добавляем айдишники пользователей для рассылки
-  if (text === "/startlection") {
+  if (text === "Богослужения") {
     await axios
       .get("http://95.163.234.208:9000/api/list/getlist")
       .then(async (res) => {
@@ -33,28 +46,44 @@ bot.on("message", async (ctx) => {
         res.data.map((data) => {
           inlineKeyboard.push([{ text: data.name, callback_data: data._id }]);
         });
-        await bot.telegram.sendMessage(chatId, "Выберите службу из списка", {
-          reply_markup: JSON.stringify({
-            inline_keyboard: inlineKeyboard,
-          }),
-        });
+        await bot.telegram.sendMessage(
+          chatId,
+          "Выберите храм, в котором проходит богослужение, из списка ниже",
+          {
+            reply_markup: JSON.stringify({
+              inline_keyboard: inlineKeyboard,
+            }),
+          }
+        );
         inlineKeyboard.length = 0;
       });
   }
 
-  if (text === "/prayer") {
+  // if (text === "/prayer") {
+  //   const prayer = [
+  //     [{ text: "Молитва перед работой", callback_data: "1" }],
+  //     [{ text: "Молитва перед едой", callback_data: "2" }],
+  //     [{ text: "Молитва перед ...", callback_data: "3" }],
+  //   ];
+  //   await bot.telegram.sendMessage(chatId, "Выберите молитву из списка", {
+  //     reply_markup: JSON.stringify({
+  //       inline_keyboard: prayer,
+  //     }),
+  //   });
+  // }
+  if (text === "Молитвы") {
     const prayer = [
-      [{ text: "Молитва перед работой", callback_data: "1" }],
-      [{ text: "Молитва перед едой", callback_data: "2" }],
-      [{ text: "Молитва перед ...", callback_data: "3" }],
+      [{ text: "Молитва Господня. Отче наш", callback_data: "1" }],
+      [{ text: "Молитвы в продолжение дня", callback_data: "2" }],
+      [{ text: "Молитвы для святого причащения", callback_data: "3" }],
+      [{ text: "Символ веры", callback_data: "4" }],
     ];
-    await bot.telegram.sendMessage(chatId, "Выберите молитву из списка", {
+    await bot.telegram.sendMessage(chatId, "Выберите молитву, из списка ниже", {
       reply_markup: JSON.stringify({
         inline_keyboard: prayer,
       }),
     });
   }
-
   if (text === "/quit") {
     await axios
       .get("http://95.163.234.208:9000/api/list/getlist")
@@ -114,33 +143,48 @@ bot.on("callback_query", async (ctx) => {
   let usersId = [];
   const uniqueIds = new Set();
   if (data === "1") {
-    const prayer1 = ["Привет", "Пока", "Рука"];
-    await prayer1.forEach((el, i) => {
-      setTimeout(() => bot.telegram.sendMessage(chatId, el), 2000 * (i + 1));
-    });
-    await bot.telegram.sendAudio(
-      chatId,
-      "https://hitster.fm/public/adv.download.php?url=https://ts01.flac.pw/mp3/229626.mp3?Rema%20%E2%80%93%20Calm%20Down"
-    );
   }
   if (data === "2") {
-    const prayer1 = ["огогвф", "в323кму", "мувам"];
-    await prayer1.forEach((el, i) => {
-      setTimeout(() => bot.telegram.sendMessage(chatId, el), 2000 * (i + 1));
-    });
-    await bot.telegram.sendAudio(
+    const prayer = [
+      [{ text: "Молитвы утренние", callback_data: "21" }],
+      [{ text: "Молитва перед вкушением пищи", callback_data: "22" }],
+      [{ text: "Молитва перед началом всякого дела", callback_data: "23" }],
+      [
+        {
+          text: "Благодарение за всякое благодеяние Божие",
+          callback_data: "4",
+        },
+      ],
+      [{ text: "Молитвы на сон грядущим", callback_data: "24" }],
+    ];
+    await bot.telegram.sendMessage(
       chatId,
-      "https://hitster.fm/public/adv.download.php?url=https://ts01.flac.pw/mp3/229626.mp3?Rema%20%E2%80%93%20Calm%20Down"
+      "Выберите молитву, из раздела 'Молитвы в продолжение дня'",
+      {
+        reply_markup: JSON.stringify({
+          inline_keyboard: prayer,
+        }),
+      }
     );
   }
   if (data === "3") {
-    const prayer1 = ["3", "4", "5432"];
-    await prayer1.forEach((el, i) => {
-      setTimeout(() => bot.telegram.sendMessage(chatId, el), 2000 * (i + 1));
-    });
-    await bot.telegram.sendAudio(
+    const prayer = [
+      [{ text: "Последование ко Святому Причащению", callback_data: "31" }],
+      [
+        {
+          text: "Благодарственные молитвы по Святом Причащении",
+          callback_data: "32",
+        },
+      ],
+    ];
+    await bot.telegram.sendMessage(
       chatId,
-      "https://hitster.fm/public/adv.download.php?url=https://ts01.flac.pw/mp3/229626.mp3?Rema%20%E2%80%93%20Calm%20Down"
+      "Выберите молитву, из раздела 'Молитвы для святого причащения'",
+      {
+        reply_markup: JSON.stringify({
+          inline_keyboard: prayer,
+        }),
+      }
     );
   }
   if (data.length > 6) {
