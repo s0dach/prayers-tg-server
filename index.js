@@ -83,6 +83,7 @@ bot.on("message", async (ctx) => {
       [{ text: "Молитвы в продолжение дня", callback_data: "2" }],
       [{ text: "Молитвы для святого причащения", callback_data: "3" }],
       [{ text: "Символ веры", callback_data: "4" }],
+      [{ text: "Test", callback_data: "5" }],
     ];
     await bot.telegram.sendMessage(chatId, "Выберите молитву, из списка ниже", {
       reply_markup: JSON.stringify({
