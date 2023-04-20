@@ -83,7 +83,7 @@ bot.on("message", async (ctx) => {
       [{ text: "Молитвы в продолжение дня", callback_data: "2" }],
       [{ text: "Молитвы для святого причащения", callback_data: "3" }],
       [{ text: "Символ веры", callback_data: "4" }],
-      [{ text: "Test", callback_data: "5" }],
+      // [{ text: "Test", callback_data: "5" }],
     ];
     await bot.telegram.sendMessage(chatId, "Выберите молитву, из списка ниже", {
       reply_markup: JSON.stringify({
@@ -532,54 +532,54 @@ bot.on("callback_query", async (ctx) => {
     );
   }
   //Тест
-  if (data === "5") {
-    const prayerTest = [
-      [{ text: "Раздел в разделе", callback_data: "51" }],
-    ];
-    await bot.telegram.sendMessage(
-      chatId,
-      "Выберите молитву, из раздела 'Тест'",
-      {
-        reply_markup: JSON.stringify({
-          inline_keyboard: prayerTest,
-        }),
-      }
-    );
-  }
-  if (data === "51") {
-    await bot.telegram.sendMessage(
-      chatId,
-      "Текст раздела",
-      {
-        parse_mode: "Markdown",
-        reply_markup: JSON.stringify({
-          inline_keyboard: [[{ text: "Продолжить", callback_data: "510" }]],
-        }),
-      }
-    );
-  }
-  const prayersTestOne = [
-    "Первая строка",
-    "Вторая строка",
-  ];
-  for (let i = 0; i < 2; i++) {
-    if (data === "51" + String(i)) {
-      if (data === "511") { //последняя цифра - это кол-во строк - 1
-        await bot.telegram.sendMessage(chatId, prayersTestOne[i], {
-          parse_mode: "Markdown",
-        });
-      } else {
-        await bot.telegram.sendMessage(chatId, prayersTestOne[i], {
-          parse_mode: "Markdown",
-          reply_markup: JSON.stringify({
-            inline_keyboard: [
-              [{ text: "Продолжить", callback_data: "51" + String(i + 1) }],
-            ],
-          }),
-        });
-      }
-    }
-  }
+  // if (data === "5") {
+  //   const prayerTest = [
+  //     [{ text: "Раздел в разделе", callback_data: "51" }],
+  //   ];
+  //   await bot.telegram.sendMessage(
+  //     chatId,
+  //     "Выберите молитву, из раздела 'Тест'",
+  //     {
+  //       reply_markup: JSON.stringify({
+  //         inline_keyboard: prayerTest,
+  //       }),
+  //     }
+  //   );
+  // }
+  // if (data === "51") {
+  //   await bot.telegram.sendMessage(
+  //     chatId,
+  //     "Текст раздела",
+  //     {
+  //       parse_mode: "Markdown",
+  //       reply_markup: JSON.stringify({
+  //         inline_keyboard: [[{ text: "Продолжить", callback_data: "510" }]],
+  //       }),
+  //     }
+  //   );
+  // }
+  // const prayersTestOne = [
+  //   "Первая строка",
+  //   "Вторая строка",
+  // ];
+  // for (let i = 0; i < 2; i++) {
+  //   if (data === "51" + String(i)) {
+  //     if (data === "511") { //последняя цифра - это кол-во строк - 1
+  //       await bot.telegram.sendMessage(chatId, prayersTestOne[i], {
+  //         parse_mode: "Markdown",
+  //       });
+  //     } else {
+  //       await bot.telegram.sendMessage(chatId, prayersTestOne[i], {
+  //         parse_mode: "Markdown",
+  //         reply_markup: JSON.stringify({
+  //           inline_keyboard: [
+  //             [{ text: "Продолжить", callback_data: "51" + String(i + 1) }],
+  //           ],
+  //         }),
+  //       });
+  //     }
+  //   }
+  // }
   // Лекции с админки
   if (data.length > 6) {
     await axios
