@@ -83,6 +83,7 @@ bot.on("message", async (ctx) => {
       [{ text: "Молитвы в продолжение дня", callback_data: "2" }],
       [{ text: "Молитвы для святого причащения", callback_data: "3" }],
       [{ text: "Символ веры", callback_data: "4" }],
+      [{ text: "Test", callback_data: "5" }],
     ];
     await bot.telegram.sendMessage(chatId, "Выберите молитву, из списка ниже", {
       reply_markup: JSON.stringify({
@@ -153,6 +154,23 @@ bot.on("callback_query", async (ctx) => {
     await bot.telegram.sendMessage(chatId, firstPrayer, {
       parse_mode: "Markdown",
     });
+  }
+  // 5 раздел (тест)
+  if (data === "5") {
+    const prayerTest = [
+      [{ text: "1", callback_data: "51" }],
+      [{ text: "2", callback_data: "52" }],
+      [{ text: "3", callback_data: "53" }],
+    ];
+    await bot.telegram.sendMessage(
+      chatId,
+      "Выберите молитву, из раздела 'Test'",
+      {
+        reply_markup: JSON.stringify({
+          inline_keyboard: prayerTest,
+        }),
+      }
+    );
   }
   // 2 раздел молитв
   if (data === "2") {
